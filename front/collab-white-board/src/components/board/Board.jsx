@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react'
 import './style.css'
 
 const Board = () => {
+
+    let timeout;
+
     useEffect(() => {
         draw();
     }, [])
@@ -43,6 +46,13 @@ const Board = () => {
             ctx.lineTo(mouse.x, mouse.y);
             ctx.closePath();
             ctx.stroke();
+
+            if(timeout !== undefined){
+                clearTimeout(timeout);
+            }
+            timeout = setTimeout(()=>{
+                let b64ID = canvas.toDataURL("image/png");
+            })
         };
     }
 
