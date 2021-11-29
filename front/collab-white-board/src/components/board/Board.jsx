@@ -1,12 +1,24 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
+import io from 'socket.io-client'
 import './style.css'
 
 const Board = () => {
 
     let timeout;
+    const socket = io("http://localhost:5000");
 
     useEffect(() => {
         draw();
+        socket.emit("reply");
+        socket.on("canvas", (data) => {
+            let img = new Image();
+            let canvas = document.querySelector('#boardCanvas');
+            let ctx = canvas.getContext('2d');
+            img.onload = function() {
+                ctx.drawImage(img, 0, 0);
+            };
+            img.src = data;
+        })
     }, [])
 
     const draw = () => {
@@ -52,7 +64,9 @@ const Board = () => {
             }
             timeout = setTimeout(()=>{
                 let b64ID = canvas.toDataURL("image/png");
-            })
+                socket.emit("canvas-data", b64ID);
+                console.log("555")
+            }, 1000)
         };
     }
 
