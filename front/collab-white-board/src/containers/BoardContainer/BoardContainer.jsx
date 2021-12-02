@@ -1,16 +1,27 @@
 import React from 'react';
 
-
 import './style.css';
 import Board from "../../components/board/Board";
+import * as UserHelpers from "../../helpers/UserHelpers";
 
 class Container extends React.Component
 {
     constructor(props) {
         super(props);
         this.state = {
-            color: "black",
+            color: "",
             size: "10"
+        }
+    }
+
+    componentDidMount() {
+        const connectedUserId = localStorage.getItem("id")
+        if(connectedUserId !== null){
+            UserHelpers.getUserById(connectedUserId).then((response) => {
+                let currentUser = response.data;
+                this.setState({color: currentUser.color});
+                console.log(this.state.color);
+            })
         }
     }
 
