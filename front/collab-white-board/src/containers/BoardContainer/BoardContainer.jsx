@@ -25,6 +25,12 @@ class Container extends React.Component
         })
     }
 
+    unlogging() {
+    localStorage.removeItem("id")
+    document.location.href = "/";
+    }
+
+
     render() {
 
         return (
@@ -44,6 +50,8 @@ class Container extends React.Component
                             <option> 30 </option>
                         </select>
                     </div>
+                    &nbsp;&nbsp;&nbsp;
+                    <button onClick={() => this.unlogging()} className="btn btn-secondary btn-block">Disconnect</button>
 
                 </div>
 

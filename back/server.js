@@ -2,7 +2,7 @@ let express = require('express');
 let app = express();
 const cors = require('cors');
 let http = require('http').createServer(app);
-let io = require('socket.io')(http);
+let io = require('socket.io')(http, {cors: {origin: "*"}});
 const mongoose = require('mongoose');
 
 app.use(cors());
