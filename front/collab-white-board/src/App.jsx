@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { Route, Routes } from 'react-router-dom';
 
 
-import BoardContainer from "./containers/BoardContainer/BoardContainer";
+import BoardContainer from "./containers/BoardContainer/BoardContainer.jsx";
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import LoginSignUp from "./components/Authentication/LoginSignUp";
+import LoginSignUp from "./components/Authentication/LoginSignUp.jsx";
 
 
 function App() {
@@ -20,11 +20,10 @@ function App() {
 
   return (
         <Routes>
-          {!userConnected ? (
+          {userConnected ? (
               <Route path="/" element={<LoginSignUp />}/>
           ) : (
               <Route path="/board" element={<BoardContainer />}/>
-
           )}
         </Routes>
   );

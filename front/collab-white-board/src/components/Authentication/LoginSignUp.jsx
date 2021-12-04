@@ -1,6 +1,6 @@
 import React, {useState} from "react";
-import { authenticate } from "../../helpers/AuthHelpers";
-import { register } from "../../helpers/AuthHelpers";
+import { authenticate } from "../../helpers/AuthHelpers.jsx";
+import { register } from "../../helpers/AuthHelpers.jsx";
 
 import "./style.css"
 

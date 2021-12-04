@@ -1,8 +1,8 @@
 import React from 'react';
 
 import './style.css';
-import Board from "../../components/board/Board";
-import * as UserHelpers from "../../helpers/UserHelpers";
+import Board from "../../components/board/Board.jsx";
+import * as UserHelpers from "../../helpers/UserHelpers.jsx";
 
 class Container extends React.Component
 {

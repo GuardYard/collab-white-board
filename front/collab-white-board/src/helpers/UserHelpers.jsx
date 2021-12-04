@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const USER_API_BASE_URL = "http://localhost:5000/users/"
+const USER_API_BASE_URL = "http://localhost:4000/api/users/"
 
 export const getAllUsers = () => {
     return axios.get(USER_API_BASE_URL);
