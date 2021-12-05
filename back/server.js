@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 
 app.use(cors());
 app.use(express.json());
-let serv_port = 5000 ;
+let serv_port = 4000 ;
 
 mongoose.connect("mongodb+srv://group:fLJzHxm7XmRTSf2y@cluster0.fvehm.mongodb.net/collab_whiteboard?retryWrites=true&w=majority")
     .catch(err => {
@@ -28,8 +28,8 @@ io.on('connection', (socket) => {
 const userRoutes = require('./routes/users')
 const authRoutes = require('./routes/authentification')
 
-app.use('/', authRoutes);
-app.use('/users', userRoutes);
+app.use('/api/', authRoutes);
+app.use('/api/users', userRoutes);
 
 http.listen(serv_port, () => {
     console.log("Port: " + serv_port);

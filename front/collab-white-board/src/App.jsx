@@ -20,7 +20,7 @@ function App() {
 
   return (
         <Routes>
-          {userConnected ? (
+          {!userConnected ? (
               <Route path="/" element={<LoginSignUp />}/>
           ) : (
               <Route path="/board" element={<BoardContainer />}/>

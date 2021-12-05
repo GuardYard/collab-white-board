@@ -6,7 +6,7 @@ import './style.css';
 class Board extends React.Component {
 
     timeout;
-    socket = io.connect("http://localhost:5000");
+    socket = io.connect("http://localhost:4000");
 
     ctx;
     isDrawing = false;
@@ -25,7 +25,6 @@ class Board extends React.Component {
                 let ctx = canvas.getContext('2d');
                 image.onload = function() {
                     ctx.drawImage(image, 0, 0);
-
                     root.isDrawing = false;
                 };
                 image.src = data;
@@ -33,8 +32,11 @@ class Board extends React.Component {
         })
     }
 
+
     componentDidMount() {
         this.drawOnCanvas();
+        this.writeOnCanvas();
+        const img = this.refs.image
     }
 
     componentWillReceiveProps(newProps) {
@@ -46,7 +48,7 @@ class Board extends React.Component {
         let canvas = document.querySelector('#canvas');
         this.ctx = canvas.getContext('2d');
         let ctx = this.ctx;
-
+        ctx.save();
         let drawing = document.querySelector('#drawing');
         let sketch_style = getComputedStyle(drawing);
         canvas.width = parseInt(sketch_style.getPropertyValue('width'));
@@ -54,6 +56,9 @@ class Board extends React.Component {
 
         let mouse = {x: 0, y: 0};
         let last_mouse = {x: 0, y: 0};
+        let recentWords = [];
+        let undoList = [];
+
         canvas.addEventListener('mousemove', function(e) {
             last_mouse.x = mouse.x;
             last_mouse.y = mouse.y;
@@ -86,7 +91,47 @@ class Board extends React.Component {
             root.timeout = setTimeout(function(){
                 let base64ImageData = canvas.toDataURL("image/png");
                 root.socket.emit("canvas-data", base64ImageData);
-            }, 1000)
+            }, 50)
+        };
+    }
+
+    writeOnCanvas() {
+        let canvas = document.getElementById('canvas');
+        this.ctx = canvas.getContext('2d');
+        let ctx = this.ctx;
+
+        let startX = 0;
+        let mouse = {x: 0, y: 0};
+
+
+        canvas.addEventListener("click",function(e){
+            mouse.x = e.pageX - this.offsetLeft;
+            mouse.y = e.pageY - this.offsetTop;
+            startX = mouse.x
+            return false;
+        }, false)
+
+        document.addEventListener("keydown",function(e){
+            ctx.font = "25px Arial"
+            if(e.keyCode === 13){
+                mouse.x = startX;
+                mouse.y += 20;
+            } else {
+                console.log(e.key);
+                ctx.fillText(e.key, mouse.x, mouse.y);
+                mouse.x += ctx.measureText(e.key).width;
+                onWrite()
+            }
+        }, false)
+
+        let root = this;
+        let onWrite = function() {
+            ctx.stroke();
+            if(root.timeout !== undefined) clearTimeout(root.timeout);
+            root.timeout = setTimeout(function(){
+                let base64ImageData = canvas.toDataURL("image/png");
+                root.socket.emit("canvas-data", base64ImageData);
+            }, 50)
         };
     }
 
@@ -94,6 +139,7 @@ class Board extends React.Component {
         return (
             <div className="drawing" id="drawing">
                 <canvas className="canvas" id="canvas"/>
+                {/*<img ref="image" src={} style={{display:'none'}}/>*/}
             </div>
         )
     }
